@@ -1,0 +1,1 @@
+const About = { template: '<p>about page</p>' }

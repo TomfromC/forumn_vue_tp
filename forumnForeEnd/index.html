@@ -1,0 +1,63 @@
+<html>
+<head>
+	<title>论坛主页</title>
+	<meta charset="utf-8">
+	<script src="js/vue.js"></script>
+	<script src="js/vue-resource.min.js"></script>
+	<script src="js/vue-router.js"></script>
+</head>
+<body>
+	<div id="app">
+		<p>
+			<!-- 使用 router-link 组件来导航. -->
+			<!-- 通过传入 `to` 属性指定链接. -->
+			<!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
+			<router-link to="/Home">Go to Home</router-link>
+			<!-- <router-link to="/">Go to Home</router-link> -->
+			<router-link to="/About">Go to About</router-link>
+		</p>
+		<!-- 路由出口 -->
+		<!-- 路由匹配到的组件将渲染在这里 -->
+		<router-view></router-view>
+
+		<ul>
+			<li v-for="(article,index) in  articles">
+				{{ article.title }}
+			</li>
+		</ul>
+	</div>
+<!--引入组件.js???-->
+<script src='component/Home.js'></script>
+<script src='component/About.js'></script>
+<script src='component/Article.js'></script>
+<script>
+const NotFound = { template: '<p>Page not found</p>' }
+
+const routes = [
+  { path: '/', redirect: 'Home' },
+  { path: '/Home', component: Home },
+  // { path: '/', component: Home },
+  { path: '/Article', component: Article },
+  { path: '/About', component: About }
+]
+
+const router = new VueRouter({
+  routes // （缩写）相当于 routes: routes
+})
+
+const app = new Vue({
+  el:"#app",
+  router,
+  data: {
+	// message: 'Hello Vue!',
+	articles:[],
+	//pageNow:1
+  },
+  mounted:function(){
+		// this.getArticle()
+  },
+})
+
+</script>
+</body>
+</html>
