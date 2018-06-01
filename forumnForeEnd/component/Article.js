@@ -1,5 +1,10 @@
 const Article = {
-	template: '<p>Article page{{articles.title}}{{articles.content}}</p>',
+	template: `
+		<div>
+			<slot></slot>
+			Article page{{articles.title}}{{articles.content}}
+		</div>
+		`,
 	created:function(){
 	    this.id = this.$route.query.id;
 	    //this.name = this.$route.query.name;
@@ -10,7 +15,7 @@ const Article = {
     methods: {
 	  	getArticleById:function(id){
 	  	//this.$http.get("/forumnbackend/index.php/Home/Article/getArticleById?id="+id).then(
-	  	this.$http.get("/forumnbackend/index.php/Home/Article/getArticleById",{params: {id:1}}).then(
+	  	this.$http.get("/forumnbackend/index.php/Home/Article/getArticleById",{params: {id:id}}).then(
 	        function (res) {
 	            // 处理成功的结果
 	            console.info(res.body[0]);

@@ -1,0 +1,70 @@
+<html>
+<head>
+	<title>test</title>
+	<meta charset="utf-8">
+	<script src="js/vue.js"></script>
+	<script src="js/vue-scroller.min.js"></script>
+</head>
+<body>
+	<div id="app">
+	  <div class="header">
+	    <h1 class="title">Refresh & Infinite</h1>
+	  </div>
+	  <!--用scroller的标签-->
+	  <scroller :on-refresh="refresh"
+	            :on-infinite="infinite"
+	            style="padding-top: 44px;">
+	    <div v-for="(item, index) in items" class="row" :class="{'grey-bg': index % 2 == 0}">
+	      {{ item }}
+	    </div>
+	  </scroller>
+	</div>
+
+	<script>
+		new Vue({
+		  el: '#app',
+
+		  data: {
+		    items: []
+		  },
+
+		  mounted: function () {
+		    for (var i = 1; i <= 20; i++) {//初始的时候是先给20,下面的就是10个10个来.
+		      this.items.push(i + ' - keep walking, be 2 with you.');
+		    }
+		    this.top = 1;
+		    this.bottom = 20;
+		  },
+
+		  methods: {
+		  	//刷新
+		    refresh: function (done) {
+		      console.info(done)
+		      var self = this
+		      setTimeout(function () {
+		        var start = self.top - 1//开始的时候start就是0
+		        for (var i = start; i > start - 10; i--) {//从大到小增加,所以用splice(0,0,xxx)粘到前面
+		          self.items.splice(0, 0, i + ' - keep walking, be 2 with you.');
+		        }
+		        self.top = self.top - 10;
+		        done();//这里的done执行传入的函数.
+		      }, 1500)
+		    },
+		    //无限拉
+		    infinite: function (done) {
+		      console.info(done)
+		      var self = this
+		      setTimeout(function () {
+		        var start = self.bottom + 1;//加在后面的,所以start开始处就是之前的最后.
+		        for (var i = start; i < start + 10; i++) {//从小到大增加,所以用push加到后面
+		          self.items.push(i + ' - keep walking, be 2 with you.');
+		        }
+		        self.bottom = self.bottom + 10;
+		        done();
+		      }, 1500)
+		    }
+		  }
+		});
+	</script>
+</body>
+</html>

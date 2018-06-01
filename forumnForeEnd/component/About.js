@@ -1,1 +1,1 @@
-const About = { template: '<p>about page</p>' }
+const About = { template: '<p><slot></slot>about page</p>' }

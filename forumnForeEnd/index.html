@@ -2,44 +2,65 @@
 <head>
 	<title>论坛主页</title>
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0,minimum-scale=1.0">
 	<script src="js/vue.js"></script>
 	<script src="js/vue-resource.min.js"></script>
 	<script src="js/vue-router.js"></script>
+	<script src="js/vue-scroller.min.js"></script>
+	<!-- <link rel="stylesheet" href="css/bootstrap.css"></link> -->
+	<script src="js/bootstrap-vue.js"></script>
+	<script src="js/md5.js"></script>
+	
+	<link rel="stylesheet" href="css/index.css"></link>
+	<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="css/bootstrap-vue.css"/>
+	<style>
+		/**{
+			margin: 0;
+			padding: 0;
+		}
+		header{
+			background:green;z-index:2;position: relative;
+		}
+		.router{
+			display:flex;justify-content: space-evenly;
+		}*/
+	</style>
 </head>
 <body>
 	<div id="app">
-		<p>
+		<header class="">
+			<login-component></login-component>
 			<!-- 使用 router-link 组件来导航. -->
 			<!-- 通过传入 `to` 属性指定链接. -->
 			<!-- <router-link> 默认会被渲染成一个 `<a>` 标签 -->
-			<router-link to="/Home">Go to Home</router-link>
-			<!-- <router-link to="/">Go to Home</router-link> -->
-			<router-link to="/About">Go to About</router-link>
-		</p>
-		<!-- 路由出口 -->
-		<!-- 路由匹配到的组件将渲染在这里 -->
-		<router-view></router-view>
-
-		<ul>
-			<li v-for="(article,index) in  articles">
-				{{ article.title }}
-			</li>
-		</ul>
+			<div class="router">
+				<router-link to="/Home">Go to Home</router-link>
+				<!-- <router-link to="/">Go to Home</router-link> -->
+				<router-link to="/About">Go to About</router-link>
+			</div>
+		</header>
+		<keep-alive>
+			<router-view v-if="$route.meta.keepAlive"></router-view>
+		</keep-alive>
+		<router-view v-if="!$route.meta.keepAlive"></router-view>
 	</div>
+
 <!--引入组件.js???-->
 <script src='component/Home.js'></script>
 <script src='component/About.js'></script>
 <script src='component/Article.js'></script>
+<script src='component/Login.js'></script>
 <script>
 const NotFound = { template: '<p>Page not found</p>' }
 
 const routes = [
   { path: '/', redirect: 'Home' },
-  { path: '/Home', component: Home },
-  // { path: '/', component: Home },
+  { path: '/Home', component: Home,meta: { keepAlive: true } },
   { path: '/Article', component: Article },
   { path: '/About', component: About }
 ]
+
 
 const router = new VueRouter({
   routes // （缩写）相当于 routes: routes
@@ -51,11 +72,42 @@ const app = new Vue({
   data: {
 	// message: 'Hello Vue!',
 	articles:[],
+	refreshText:"",
+	snapping:false
 	//pageNow:1
+  },
+  methods: {
+  	// //刷新
+   //  refresh: function (done) {
+   //    //console.info(done)
+      
+   //    // var self = this
+   //    // setTimeout(function () {
+   //    //   // console.info("刷新")
+   //    //   // done();//这里的done执行传入的函数.
+   //    //   self.$router.go(0)
+   //    // }, 1500)
+   //    this.$refs.child.refresh(done)
+   //  },
+    //无限拉
+    // infinite: function (done) {
+    //   //this.finishInfinite(true)
+    //   // console.info(done)
+    //   // var self = this
+    //   // setTimeout(function () {
+    //   // 	//self.$refs.myscroller.finishInfinite(2)
+    //   // 	var res = self.$refs.child.getArticleByPullUp()
+    //   //   done(res);
+    //   // }, 1500)
+    //   this.$refs.child.infinite(done)
+    // }
   },
   mounted:function(){
 		// this.getArticle()
   },
+  components:{
+  	'login-component':Login
+  }
 })
 
 </script>
